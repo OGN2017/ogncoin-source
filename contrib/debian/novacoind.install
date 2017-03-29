@@ -1,0 +1,2 @@
+debian/bin/OGNCOINd usr/bin
+src/OGNCOINd usr/lib/OGNCOIN

@@ -1,0 +1,11 @@
+[Unit]
+Description=OGNCOIN daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=OGNCOIN
+ExecStart=/opt/OGNCOIN/OGNCOINd
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: OGNCOIN
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# OGNCOIN_enable (bool): Set to NO by default. Set this variable to YES if you want to enable OGNCOIN service.
+# OGNCOIN_config (path): Set to /usr/local/etc/OGNCOIN.conf by default.
+# OGNCOIN_user:  The user account OGNCOIN daemon runs as. It uses 'root' user by default.
+# OGNCOIN_group: The group account OGNCOIN daemon runs as. It uses 'wheel' group by default.
+# OGNCOIN_datadir (str): Default to "/var/db/OGNCOIN". Base data directory.
+
+. /etc/rc.subr
+
+name=OGNCOIN
+rcvar=OGNCOIN_enable
+
+: ${OGNCOIN_enable:=NO}
+: ${OGNCOIN_config=/usr/local/etc/OGNCOIN.conf}
+: ${OGNCOIN_datadir=/var/db/OGNCOIN}
+: ${OGNCOIN_user="root"}
+: ${OGNCOIN_group="wheel"}
+
+required_files=${OGNCOIN_config}
+command=/usr/local/bin/OGNCOINd
+OGNCOIN_chdir=${OGNCOIN_datadir}
+pidfile="${OGNCOIN_datadir}/OGNCOINd.pid"
+stop_cmd=OGNCOIN_stop
+command_args="-conf=${OGNCOIN_config} -datadir=${OGNCOIN_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+OGNCOIN_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${OGNCOIN_datadir}
+	[ $? -eq 0 ] && chown -R ${OGNCOIN_user}:${OGNCOIN_group} ${OGNCOIN_datadir}
+}
+
+OGNCOIN_prestart()
+{
+	if [ ! -d "${OGNCOIN_datadir}/." ]; then
+		OGNCOIN_create_datadir || return 1
+	fi
+}
+
+OGNCOIN_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+OGNCOIN_stop()
+{
+    OGNCOIN_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${OGNCOIN_config} -datadir=${OGNCOIN_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

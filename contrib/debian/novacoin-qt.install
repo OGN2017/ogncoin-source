@@ -1,0 +1,5 @@
+OGNCOIN-qt usr/bin
+share/pixmaps/OGNCOIN32.xpm usr/share/pixmaps
+share/pixmaps/OGNCOIN80.xpm usr/share/pixmaps
+debian/OGNCOIN-qt.desktop usr/share/applications
+debian/OGNCOIN-qt.protocol usr/share/kde4/services/

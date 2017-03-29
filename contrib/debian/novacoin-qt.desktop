@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=OGNCOIN
+Comment=OGNCOIN P2P Cryptocurrency
+Comment[ru]=OGNCOIN, P2P криптовалюта
+Comment[fr]=OGNCOIN, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=OGNCOIN, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/OGNCOIN-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/OGNCOIN80.xpm
+MimeType=x-scheme-handler/OGNCOIN;
+Categories=Office;
